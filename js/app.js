@@ -1,34 +1,4 @@
 /**
-   * Generate signature HTML with template-specific styling
-   */
-  generateSignatureHTML(template) {
-    const { formData, imageDataUrl } = this.state;
-    const imageSrc = imageDataUrl || (template.imageStyle !== 'hidden' ? this.placeholderImage : null);
-    
-    const fullName = `${formData.firstName} ${formData.lastName}`.trim() || 'John Doe';
-    
-    // Generate social links
-    let socialHtml = '';
-    if (formData.linkedin) {
-      socialHtml += `<a href="${formData.linkedin}" class="social-link" target="_blank" rel="noopener">💼</a>`;
-    }
-    if (formData.twitter) {
-      socialHtml += `<a href="${formData.twitter}" class="social-link" target="_blank" rel="noopener">🐦</a>`;
-    }
-    if (socialHtml) {
-      socialHtml = `<div class="signature-social" style="margin-top: 8px; display: flex; gap: 8px;">${socialHtml}</div>`;
-    }
-
-    // Template-specific styling
-    const nameStyle = `font-size: 18px; font-weight: 600; color: ${formData.color}; margin-bottom: 4px;`;
-    const titleStyle = template.showTitle ? `font-size: 14px; color: #666666; font-style: italic; margin-bottom: 6px;` : '';
-    const companyStyle = template.showCompany ? `font-size: 16px; font-weight: ${template.companyWeight === 'bold' ? '700' : '600'}; color: ${formData.color}; margin-bottom: 4px;` : '';
-    
-    // Different layouts for different templates
-    if (template.layout === 'vertical') {
-      // Corporate and Minimal vertical layout
-      const imageCell = imageSrc && template.imageStyle !== 'hidden' ? `
-        <div style="text-align: center; margin-bottom: 12px/**
  * Modern Email Signature Generator
  * Clean, modular JavaScript architecture
  */
@@ -45,29 +15,29 @@ class SignatureGenerator {
     };
 
     this.templates = {
-      modern: { 
-        imageStyle: 'rounded', 
+      modern: {
+        imageStyle: 'rounded',
         layout: 'horizontal',
         showTitle: true,
         showCompany: true,
         companyWeight: 'normal'
       },
-      classic: { 
-        imageStyle: 'square', 
+      classic: {
+        imageStyle: 'square',
         layout: 'horizontal',
         showTitle: true,
         showCompany: true,
         companyWeight: 'normal'
       },
-      minimal: { 
-        imageStyle: 'hidden', 
+      minimal: {
+        imageStyle: 'hidden',
         layout: 'vertical',
         showTitle: false,
         showCompany: false,
         companyWeight: 'normal'
       },
-      corporate: { 
-        imageStyle: 'square', 
+      corporate: {
+        imageStyle: 'square',
         layout: 'vertical',
         showTitle: true,
         showCompany: true,
@@ -91,7 +61,7 @@ class SignatureGenerator {
     this.updatePreview();
     this.updateProgress();
     this.setCurrentYear();
-    
+
     // Add loading animation on init
     this.addInitialAnimations();
   }
@@ -104,7 +74,7 @@ class SignatureGenerator {
     this.elements = {
       // Theme
       themeToggle: document.getElementById('themeToggle'),
-      
+
       // Form inputs
       firstName: document.getElementById('firstName'),
       lastName: document.getElementById('lastName'),
@@ -117,24 +87,25 @@ class SignatureGenerator {
       colorText: document.getElementById('colorText'),
       linkedin: document.getElementById('linkedin'),
       twitter: document.getElementById('twitter'),
-      
+      github: document.getElementById('github'),
+
       // Image upload
       imageInput: document.getElementById('imageInput'),
       imageUpload: document.getElementById('imageUpload'),
-      
+
       // Preview
       signaturePreview: document.getElementById('signaturePreview'),
       signatureContent: document.getElementById('signatureContent'),
       progressFill: document.getElementById('progressFill'),
-      
+
       // Buttons
       copyHtmlBtn: document.getElementById('copyHtmlBtn'),
       copyTextBtn: document.getElementById('copyTextBtn'),
       downloadBtn: document.getElementById('downloadBtn'),
-      
+
       // Footer
       currentYear: document.getElementById('currentYear'),
-      
+
       // Template and view buttons
       templateBtns: document.querySelectorAll('.template-btn'),
       viewBtns: document.querySelectorAll('.view-btn')
@@ -150,10 +121,10 @@ class SignatureGenerator {
 
     // Form inputs with debounced updates
     const formInputs = [
-      'firstName', 'lastName', 'title', 'company', 
-      'email', 'phone', 'website', 'linkedin', 'twitter'
+      'firstName', 'lastName', 'title', 'company',
+      'email', 'phone', 'website', 'linkedin', 'twitter', 'github'
     ];
-    
+
     formInputs.forEach(inputId => {
       const element = this.elements[inputId];
       if (element) {
@@ -194,7 +165,7 @@ class SignatureGenerator {
   handleInputChange(event) {
     const { target } = event;
     this.updateCharCount(target);
-    
+
     // Debounce preview updates for better performance
     clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(() => {
@@ -213,7 +184,7 @@ class SignatureGenerator {
       const current = input.value.length;
       const max = input.maxLength;
       charCount.textContent = `${current}/${max}`;
-      
+
       // Add warning class if near limit
       charCount.classList.toggle('warning', current > max * 0.8);
     }
@@ -225,11 +196,11 @@ class SignatureGenerator {
   validateInput(input) {
     const isValid = input.checkValidity();
     input.classList.toggle('error', !isValid);
-    
+
     if (!isValid) {
       this.showInputError(input);
     }
-    
+
     return isValid;
   }
 
@@ -271,7 +242,7 @@ class SignatureGenerator {
    */
   bindImageUploadEvents() {
     const { imageUpload, imageInput } = this.elements;
-    
+
     if (!imageUpload || !imageInput) return;
 
     // Click to upload
@@ -297,7 +268,7 @@ class SignatureGenerator {
     imageUpload.addEventListener('drop', (e) => {
       e.preventDefault();
       imageUpload.classList.remove('dragover');
-      
+
       if (e.dataTransfer.files.length) {
         this.handleImageFile(e.dataTransfer.files[0]);
       }
@@ -345,12 +316,12 @@ class SignatureGenerator {
    */
   switchTemplate(templateName) {
     this.state.currentTemplate = templateName;
-    
+
     // Update active button
     this.elements.templateBtns?.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.template === templateName);
     });
-    
+
     this.updatePreview();
     this.showNotification(`Switched to ${templateName} template`, 'info');
   }
@@ -360,15 +331,15 @@ class SignatureGenerator {
    */
   switchView(viewName) {
     this.state.currentView = viewName;
-    
+
     // Update active button
     this.elements.viewBtns?.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.view === viewName);
     });
-    
+
     // Update preview container
     this.elements.signaturePreview?.classList.toggle('mobile-view', viewName === 'mobile');
-    
+
     this.showNotification(`Switched to ${viewName} view`, 'info');
   }
 
@@ -386,7 +357,8 @@ class SignatureGenerator {
       website: this.elements.website?.value || '',
       color: this.elements.colorPicker?.value || '#000000',
       linkedin: this.elements.linkedin?.value || '',
-      twitter: this.elements.twitter?.value || ''
+      twitter: this.elements.twitter?.value || '',
+      github: this.elements.github?.value || ''
     };
   }
 
@@ -397,7 +369,7 @@ class SignatureGenerator {
     this.updateFormData();
     const template = this.templates[this.state.currentTemplate];
     const html = this.generateSignatureHTML(template);
-    
+
     if (this.elements.signatureContent) {
       this.elements.signatureContent.innerHTML = html;
       this.elements.signatureContent.classList.add('fade-in');
@@ -410,9 +382,9 @@ class SignatureGenerator {
   generateSignatureHTML(template) {
     const { formData, imageDataUrl } = this.state;
     const imageSrc = imageDataUrl || (template.imageStyle !== 'hidden' ? this.placeholderImage : null);
-    
+
     const fullName = `${formData.firstName} ${formData.lastName}`.trim() || 'John Doe';
-    
+
     // Generate social links
     let socialHtml = '';
     if (formData.linkedin) {
@@ -420,6 +392,9 @@ class SignatureGenerator {
     }
     if (formData.twitter) {
       socialHtml += `<a href="${formData.twitter}" class="social-link" target="_blank" rel="noopener">🐦</a>`;
+    }
+    if (formData.github) {
+        socialHtml += `<a href="${formData.github}" class="social-link" target="_blank" rel="noopener">🐙</a>`;
     }
     if (socialHtml) {
       socialHtml = `<div class="signature-social" style="margin-top: 8px; display: flex; gap: 8px;">${socialHtml}</div>`;
@@ -429,15 +404,32 @@ class SignatureGenerator {
     const nameStyle = `font-size: 18px; font-weight: 600; color: ${formData.color}; margin-bottom: 4px;`;
     const titleStyle = template.showTitle && formData.title ? `font-size: 14px; color: #666666; font-style: italic; margin-bottom: 6px;` : '';
     const companyStyle = template.showCompany && formData.company ? `font-size: 16px; font-weight: ${template.companyWeight === 'bold' ? '700' : '600'}; color: ${formData.color}; margin-bottom: 4px;` : '';
-    
+
     // Template-specific layouts
-    if (template.layout === 'vertical' || this.state.currentTemplate === 'corporate') {
+    if (this.state.currentTemplate === 'minimal') {
+        // Minimal template - text only, very clean
+        return `
+          <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+            <div style="font-size: 18px; font-weight: 600; color: ${formData.color}; margin-bottom: 2px;">
+              ${fullName}
+            </div>
+            <div style="font-size: 13px; color: #666666;">
+              ${formData.email ? `${formData.email}` : ''}
+              ${formData.email && formData.phone ? ' • ' : ''}
+              ${formData.phone ? `${formData.phone}` : ''}
+              ${(formData.email || formData.phone) && formData.website ? ' • ' : ''}
+              ${formData.website ? `${formData.website}` : 'www.company.com'}
+            </div>
+            ${socialHtml}
+          </div>
+        `;
+    } else if (template.layout === 'vertical') {
       // Vertical layout for Corporate template
       return `
         <div style="font-family: Arial, sans-serif; line-height: 1.4; text-align: center;">
           ${imageSrc && template.imageStyle !== 'hidden' ? `
             <div style="margin-bottom: 12px;">
-              <img src="${imageSrc}" 
+              <img src="${imageSrc}"
                    style="width: 60px; height: 60px; object-fit: cover; ${template.imageStyle === 'rounded' ? 'border-radius: 50%;' : 'border-radius: 4px;'}"
                    alt="Profile Picture">
             </div>
@@ -453,28 +445,11 @@ class SignatureGenerator {
           ${socialHtml}
         </div>
       `;
-    } else if (this.state.currentTemplate === 'minimal') {
-      // Minimal template - text only, very clean
-      return `
-        <div style="font-family: Arial, sans-serif; line-height: 1.5;">
-          <div style="font-size: 18px; font-weight: 600; color: ${formData.color}; margin-bottom: 2px;">
-            ${fullName}
-          </div>
-          <div style="font-size: 13px; color: #666666;">
-            ${formData.email ? `${formData.email}` : ''}
-            ${formData.email && formData.phone ? ' • ' : ''}
-            ${formData.phone ? `${formData.phone}` : ''}
-            ${(formData.email || formData.phone) ? ' • ' : ''}
-            ${formData.website || 'www.company.com'}
-          </div>
-          ${socialHtml}
-        </div>
-      `;
     } else {
       // Horizontal layout for Modern and Classic templates
       const imageCell = imageSrc ? `
         <td style="vertical-align: top; padding: 0 16px 0 0; width: 80px;">
-          <img src="${imageSrc}" 
+          <img src="${imageSrc}"
                style="width: 70px; height: 70px; object-fit: cover; ${template.imageStyle === 'rounded' ? 'border-radius: 50%;' : 'border-radius: 6px;'}"
                alt="Profile Picture">
         </td>
@@ -508,19 +483,19 @@ class SignatureGenerator {
    */
   updateProgress() {
     const requiredFields = ['firstName', 'lastName', 'email'];
-    const optionalFields = ['title', 'company', 'phone', 'website'];
-    
-    const filledRequired = requiredFields.filter(field => 
+    const optionalFields = ['title', 'company', 'phone', 'website', 'linkedin', 'twitter', 'github'];
+
+    const filledRequired = requiredFields.filter(field =>
       this.elements[field]?.value.trim()
     ).length;
-    
-    const filledOptional = optionalFields.filter(field => 
+
+    const filledOptional = optionalFields.filter(field =>
       this.elements[field]?.value.trim()
     ).length;
-    
-    const progress = ((filledRequired / requiredFields.length) * 60) + 
+
+    const progress = ((filledRequired / requiredFields.length) * 60) +
                     ((filledOptional / optionalFields.length) * 40);
-    
+
     if (this.elements.progressFill) {
       this.elements.progressFill.style.width = `${Math.min(progress, 100)}%`;
     }
@@ -532,18 +507,18 @@ class SignatureGenerator {
   async copySignature(format) {
     try {
       let content;
-      
+
       if (format === 'html') {
         const template = this.templates[this.state.currentTemplate];
         content = this.generateSignatureHTML(template);
       } else {
         content = this.generateTextSignature();
       }
-      
+
       await navigator.clipboard.writeText(content);
       this.showCopySuccess(format === 'html' ? this.elements.copyHtmlBtn : this.elements.copyTextBtn);
       this.showNotification(`${format.toUpperCase()} signature copied to clipboard`, 'success');
-      
+
     } catch (error) {
       this.showNotification('Failed to copy signature', 'error');
       console.error('Copy error:', error);
@@ -556,7 +531,7 @@ class SignatureGenerator {
   generateTextSignature() {
     const { formData } = this.state;
     const fullName = `${formData.firstName} ${formData.lastName}`.trim() || 'John Doe';
-    
+
     let text = `${fullName}\n`;
     if (formData.title) text += `${formData.title}\n`;
     if (formData.company) text += `${formData.company}\n`;
@@ -566,7 +541,8 @@ class SignatureGenerator {
     text += `Website: ${formData.website || 'www.company.com'}\n`;
     if (formData.linkedin) text += `LinkedIn: ${formData.linkedin}\n`;
     if (formData.twitter) text += `Twitter: ${formData.twitter}\n`;
-    
+    if (formData.github) text += `GitHub: ${formData.github}\n`;
+
     return text;
   }
 
@@ -575,11 +551,11 @@ class SignatureGenerator {
    */
   showCopySuccess(button) {
     if (!button) return;
-    
+
     const originalText = button.innerHTML;
     button.innerHTML = '<span class="btn-icon">✅</span> Copied!';
     button.classList.add('copied');
-    
+
     setTimeout(() => {
       button.innerHTML = originalText;
       button.classList.remove('copied');
@@ -592,7 +568,7 @@ class SignatureGenerator {
   downloadSignature() {
     const { formData } = this.state;
     const fullName = `${formData.firstName} ${formData.lastName}`.trim() || 'John Doe';
-    
+
     const vCard = `BEGIN:VCARD
 VERSION:3.0
 FN:${fullName}
@@ -607,14 +583,14 @@ END:VCARD`;
     const blob = new Blob([vCard], { type: 'text/vcard' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    
+
     link.href = url;
     link.download = `${fullName.replace(/\s+/g, '_')}.vcf`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    
+
     this.showNotification('vCard downloaded successfully', 'success');
   }
 
@@ -623,7 +599,7 @@ END:VCARD`;
    */
   handleSocketConnection() {
     this.showNotification('Socket connection feature coming soon!', 'info');
-    
+
     // Placeholder for WebSocket connection
     console.log('Socket connection initiated...');
   }
@@ -645,13 +621,13 @@ END:VCARD`;
     this.state.theme = this.state.theme === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', this.state.theme);
     localStorage.setItem('signature-generator-theme', this.state.theme);
-    
+
     // Update theme toggle button
     const icon = this.elements.themeToggle?.querySelector('.theme-icon');
     if (icon) {
       icon.textContent = this.state.theme === 'dark' ? '🌞' : '🌙';
     }
-    
+
     this.showNotification(`Switched to ${this.state.theme} mode`, 'info');
   }
 
@@ -662,7 +638,7 @@ END:VCARD`;
     const savedTheme = localStorage.getItem('signature-generator-theme') || 'light';
     this.state.theme = savedTheme;
     document.documentElement.setAttribute('data-theme', savedTheme);
-    
+
     // Update theme toggle button
     const icon = this.elements.themeToggle?.querySelector('.theme-icon');
     if (icon) {
@@ -680,13 +656,13 @@ END:VCARD`;
       // Focus first input
       this.elements.firstName?.focus();
     }
-    
+
     // Ctrl/Cmd + Enter to copy HTML signature
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       event.preventDefault();
       this.copySignature('html');
     }
-    
+
     // Escape to clear focus
     if (event.key === 'Escape') {
       document.activeElement?.blur();
@@ -701,7 +677,7 @@ END:VCARD`;
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.textContent = message;
-    
+
     // Style notification
     Object.assign(notification.style, {
       position: 'fixed',
@@ -709,8 +685,8 @@ END:VCARD`;
       right: '20px',
       padding: '12px 20px',
       borderRadius: '8px',
-      background: type === 'error' ? '#ef4444' : 
-                 type === 'success' ? '#10b981' : 
+      background: type === 'error' ? '#ef4444' :
+                 type === 'success' ? '#10b981' :
                  type === 'warning' ? '#f59e0b' : '#3b82f6',
       color: 'white',
       fontWeight: '500',
@@ -721,14 +697,14 @@ END:VCARD`;
       maxWidth: '300px',
       wordWrap: 'break-word'
     });
-    
+
     document.body.appendChild(notification);
-    
+
     // Animate in
     requestAnimationFrame(() => {
       notification.style.transform = 'translateX(0)';
     });
-    
+
     // Auto remove
     setTimeout(() => {
       notification.style.transform = 'translateX(100%)';
@@ -762,12 +738,12 @@ END:VCARD`;
       ...document.querySelectorAll('.form-group'),
       ...document.querySelectorAll('.template-btn')
     ];
-    
+
     elements.forEach((el, index) => {
       if (el) {
         el.style.opacity = '0';
         el.style.transform = 'translateY(20px)';
-        
+
         setTimeout(() => {
           el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
           el.style.opacity = '1';
@@ -795,9 +771,4 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('resize', () => {
   if (window.signatureGenerator) {
     // Debounce resize handler
-    clearTimeout(window.signatureGenerator.resizeTimer);
-    window.signatureGenerator.resizeTimer = setTimeout(() => {
-      window.signatureGenerator.updatePreview();
-    }, 250);
-  }
-});
+    clearTimeout(window.signatureGenerator
