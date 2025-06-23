@@ -1,4 +1,34 @@
 /**
+   * Generate signature HTML with template-specific styling
+   */
+  generateSignatureHTML(template) {
+    const { formData, imageDataUrl } = this.state;
+    const imageSrc = imageDataUrl || (template.imageStyle !== 'hidden' ? this.placeholderImage : null);
+    
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim() || 'John Doe';
+    
+    // Generate social links
+    let socialHtml = '';
+    if (formData.linkedin) {
+      socialHtml += `<a href="${formData.linkedin}" class="social-link" target="_blank" rel="noopener">💼</a>`;
+    }
+    if (formData.twitter) {
+      socialHtml += `<a href="${formData.twitter}" class="social-link" target="_blank" rel="noopener">🐦</a>`;
+    }
+    if (socialHtml) {
+      socialHtml = `<div class="signature-social" style="margin-top: 8px; display: flex; gap: 8px;">${socialHtml}</div>`;
+    }
+
+    // Template-specific styling
+    const nameStyle = `font-size: 18px; font-weight: 600; color: ${formData.color}; margin-bottom: 4px;`;
+    const titleStyle = template.showTitle ? `font-size: 14px; color: #666666; font-style: italic; margin-bottom: 6px;` : '';
+    const companyStyle = template.showCompany ? `font-size: 16px; font-weight: ${template.companyWeight === 'bold' ? '700' : '600'}; color: ${formData.color}; margin-bottom: 4px;` : '';
+    
+    // Different layouts for different templates
+    if (template.layout === 'vertical') {
+      // Corporate and Minimal vertical layout
+      const imageCell = imageSrc && template.imageStyle !== 'hidden' ? `
+        <div style="text-align: center; margin-bottom: 12px/**
  * Modern Email Signature Generator
  * Clean, modular JavaScript architecture
  */
@@ -15,10 +45,34 @@ class SignatureGenerator {
     };
 
     this.templates = {
-      modern: { imageStyle: 'rounded', layout: 'horizontal' },
-      classic: { imageStyle: 'square', layout: 'horizontal' },
-      minimal: { imageStyle: 'hidden', layout: 'vertical' },
-      corporate: { imageStyle: 'square', layout: 'vertical' }
+      modern: { 
+        imageStyle: 'rounded', 
+        layout: 'horizontal',
+        showTitle: true,
+        showCompany: true,
+        companyWeight: 'normal'
+      },
+      classic: { 
+        imageStyle: 'square', 
+        layout: 'horizontal',
+        showTitle: true,
+        showCompany: true,
+        companyWeight: 'normal'
+      },
+      minimal: { 
+        imageStyle: 'hidden', 
+        layout: 'vertical',
+        showTitle: false,
+        showCompany: false,
+        companyWeight: 'normal'
+      },
+      corporate: { 
+        imageStyle: 'square', 
+        layout: 'vertical',
+        showTitle: true,
+        showCompany: true,
+        companyWeight: 'bold'
+      }
     };
 
     this.placeholderImage = this.generatePlaceholderSVG();
@@ -36,6 +90,7 @@ class SignatureGenerator {
     this.bindEvents();
     this.updatePreview();
     this.updateProgress();
+    this.setCurrentYear();
     
     // Add loading animation on init
     this.addInitialAnimations();
@@ -76,7 +131,9 @@ class SignatureGenerator {
       copyHtmlBtn: document.getElementById('copyHtmlBtn'),
       copyTextBtn: document.getElementById('copyTextBtn'),
       downloadBtn: document.getElementById('downloadBtn'),
-      socketBtn: document.getElementById('socketBtn'),
+      
+      // Footer
+      currentYear: document.getElementById('currentYear'),
       
       // Template and view buttons
       templateBtns: document.querySelectorAll('.template-btn'),
@@ -126,9 +183,6 @@ class SignatureGenerator {
     this.elements.copyHtmlBtn?.addEventListener('click', () => this.copySignature('html'));
     this.elements.copyTextBtn?.addEventListener('click', () => this.copySignature('text'));
     this.elements.downloadBtn?.addEventListener('click', () => this.downloadSignature());
-
-    // Socket connection (placeholder)
-    this.elements.socketBtn?.addEventListener('click', () => this.handleSocketConnection());
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
@@ -351,7 +405,7 @@ class SignatureGenerator {
   }
 
   /**
-   * Generate signature HTML
+   * Generate signature HTML with template-specific styling
    */
   generateSignatureHTML(template) {
     const { formData, imageDataUrl } = this.state;
@@ -368,41 +422,85 @@ class SignatureGenerator {
       socialHtml += `<a href="${formData.twitter}" class="social-link" target="_blank" rel="noopener">🐦</a>`;
     }
     if (socialHtml) {
-      socialHtml = `<div class="signature-social">${socialHtml}</div>`;
+      socialHtml = `<div class="signature-social" style="margin-top: 8px; display: flex; gap: 8px;">${socialHtml}</div>`;
     }
 
-    // Generate image cell
-    const imageCell = imageSrc ? `
-      <td style="vertical-align: top; padding: 0 20px 0 0; width: 100px;">
-        <img src="${imageSrc}" 
-             class="signature-image ${template.imageStyle}" 
-             alt="Profile Picture"
-             style="width: 80px; height: 80px; object-fit: cover; ${template.imageStyle === 'rounded' ? 'border-radius: 50%;' : 'border-radius: 8px;'}">
-      </td>
-    ` : '';
+    // Template-specific styling
+    const nameStyle = `font-size: 18px; font-weight: 600; color: ${formData.color}; margin-bottom: 4px;`;
+    const titleStyle = template.showTitle && formData.title ? `font-size: 14px; color: #666666; font-style: italic; margin-bottom: 6px;` : '';
+    const companyStyle = template.showCompany && formData.company ? `font-size: 16px; font-weight: ${template.companyWeight === 'bold' ? '700' : '600'}; color: ${formData.color}; margin-bottom: 4px;` : '';
+    
+    // Template-specific layouts
+    if (template.layout === 'vertical' || this.state.currentTemplate === 'corporate') {
+      // Vertical layout for Corporate template
+      return `
+        <div style="font-family: Arial, sans-serif; line-height: 1.4; text-align: center;">
+          ${imageSrc && template.imageStyle !== 'hidden' ? `
+            <div style="margin-bottom: 12px;">
+              <img src="${imageSrc}" 
+                   style="width: 60px; height: 60px; object-fit: cover; ${template.imageStyle === 'rounded' ? 'border-radius: 50%;' : 'border-radius: 4px;'}"
+                   alt="Profile Picture">
+            </div>
+          ` : ''}
+          <div style="${nameStyle}">${fullName}</div>
+          ${template.showTitle && formData.title ? `<div style="${titleStyle}">${formData.title}</div>` : ''}
+          ${template.showCompany && formData.company ? `<div style="${companyStyle}">${formData.company}</div>` : ''}
+          <div style="font-size: 13px; color: #666666; margin-top: 8px;">
+            ${formData.email ? `<div style="margin-bottom: 2px;">📧 ${formData.email}</div>` : ''}
+            ${formData.phone ? `<div style="margin-bottom: 2px;">📱 ${formData.phone}</div>` : ''}
+            <div style="margin-bottom: 2px;">🌐 ${formData.website || 'www.company.com'}</div>
+          </div>
+          ${socialHtml}
+        </div>
+      `;
+    } else if (this.state.currentTemplate === 'minimal') {
+      // Minimal template - text only, very clean
+      return `
+        <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+          <div style="font-size: 18px; font-weight: 600; color: ${formData.color}; margin-bottom: 2px;">
+            ${fullName}
+          </div>
+          <div style="font-size: 13px; color: #666666;">
+            ${formData.email ? `${formData.email}` : ''}
+            ${formData.email && formData.phone ? ' • ' : ''}
+            ${formData.phone ? `${formData.phone}` : ''}
+            ${(formData.email || formData.phone) ? ' • ' : ''}
+            ${formData.website || 'www.company.com'}
+          </div>
+          ${socialHtml}
+        </div>
+      `;
+    } else {
+      // Horizontal layout for Modern and Classic templates
+      const imageCell = imageSrc ? `
+        <td style="vertical-align: top; padding: 0 16px 0 0; width: 80px;">
+          <img src="${imageSrc}" 
+               style="width: 70px; height: 70px; object-fit: cover; ${template.imageStyle === 'rounded' ? 'border-radius: 50%;' : 'border-radius: 6px;'}"
+               alt="Profile Picture">
+        </td>
+      ` : '';
 
-    return `
-      <table class="signature-table">
-        <tbody>
-          <tr>
-            ${imageCell}
-            <td style="vertical-align: top; padding: 0; line-height: 1.4;">
-              <div class="signature-name" style="font-size: 18px; font-weight: 600; color: ${formData.color}; margin-bottom: 5px;">
-                ${fullName}
-              </div>
-              ${formData.title ? `<div class="signature-title" style="font-size: 14px; color: #64748b; font-style: italic; margin-bottom: 8px;">${formData.title}</div>` : ''}
-              ${formData.company ? `<div class="signature-company" style="font-size: 16px; font-weight: 600; color: ${formData.color}; margin-bottom: 3px;">${formData.company}</div>` : ''}
-              <div class="signature-contact" style="font-size: 13px; color: #475569;">
-                ${formData.email ? `<div style="margin-bottom: 2px;">📧 ${formData.email}</div>` : ''}
-                ${formData.phone ? `<div style="margin-bottom: 2px;">📱 ${formData.phone}</div>` : ''}
-                <div style="margin-bottom: 2px;">🌐 ${formData.website || 'www.company.com'}</div>
-              </div>
-              ${socialHtml}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    `;
+      return `
+        <table style="border-collapse: collapse; font-family: Arial, sans-serif;">
+          <tbody>
+            <tr>
+              ${imageCell}
+              <td style="vertical-align: top; padding: 0; line-height: 1.4;">
+                <div style="${nameStyle}">${fullName}</div>
+                ${template.showTitle && formData.title ? `<div style="${titleStyle}">${formData.title}</div>` : ''}
+                ${template.showCompany && formData.company ? `<div style="${companyStyle}">${formData.company}</div>` : ''}
+                <div style="font-size: 13px; color: #666666;">
+                  ${formData.email ? `<div style="margin-bottom: 2px;">📧 ${formData.email}</div>` : ''}
+                  ${formData.phone ? `<div style="margin-bottom: 2px;">📱 ${formData.phone}</div>` : ''}
+                  <div style="margin-bottom: 2px;">🌐 ${formData.website || 'www.company.com'}</div>
+                </div>
+                ${socialHtml}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+    }
   }
 
   /**
@@ -528,6 +626,16 @@ END:VCARD`;
     
     // Placeholder for WebSocket connection
     console.log('Socket connection initiated...');
+  }
+
+  /**
+   * Set current year in footer
+   */
+  setCurrentYear() {
+    const currentYear = new Date().getFullYear();
+    if (this.elements.currentYear) {
+      this.elements.currentYear.textContent = currentYear;
+    }
   }
 
   /**
