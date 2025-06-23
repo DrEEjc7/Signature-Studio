@@ -934,9 +934,18 @@ strong { color: var(--text-primary); }
 .mt-auto { margin-top: auto; }
 .mb-auto { margin-bottom: auto; }
 
-/* === Dark Mode Toggle Animation === */
+/* Dark Mode Toggle Animation */
 [data-theme="dark"] .theme-icon {
   transform: rotate(180deg);
+}
+
+[data-theme="dark"] .logo {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+[data-theme="dark"] .progress-fill {
+  background: var(--text-primary);
 }
 
 .theme-icon {
