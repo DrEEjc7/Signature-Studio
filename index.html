@@ -40,23 +40,59 @@
                 <div class="form-grid">
                     <!-- Template Selection -->
                     <div class="form-group full-width">
-                        <label>Choose Template</label>
+                        <label>Choose Template Style</label>
                         <div class="template-grid">
                             <button type="button" class="template-btn active" data-template="modern">
-                                <span class="template-icon">🎨</span>
-                                Modern
+                                <div class="template-preview">
+                                    <div class="template-layout modern-layout">
+                                        <div class="template-avatar"></div>
+                                        <div class="template-info">
+                                            <div class="template-name"></div>
+                                            <div class="template-details"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="template-title">Modern</span>
+                                <span class="template-desc">Clean lines, rounded avatar</span>
                             </button>
                             <button type="button" class="template-btn" data-template="classic">
-                                <span class="template-icon">📋</span>
-                                Classic
+                                <div class="template-preview">
+                                    <div class="template-layout classic-layout">
+                                        <div class="template-avatar square"></div>
+                                        <div class="template-info">
+                                            <div class="template-name"></div>
+                                            <div class="template-details"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="template-title">Classic</span>
+                                <span class="template-desc">Traditional, square avatar</span>
                             </button>
                             <button type="button" class="template-btn" data-template="minimal">
-                                <span class="template-icon">✨</span>
-                                Minimal
+                                <div class="template-preview">
+                                    <div class="template-layout minimal-layout">
+                                        <div class="template-info">
+                                            <div class="template-name"></div>
+                                            <div class="template-details minimal"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="template-title">Minimal</span>
+                                <span class="template-desc">Text only, no image</span>
                             </button>
                             <button type="button" class="template-btn" data-template="corporate">
-                                <span class="template-icon">🏢</span>
-                                Corporate
+                                <div class="template-preview">
+                                    <div class="template-layout corporate-layout">
+                                        <div class="template-info">
+                                            <div class="template-name"></div>
+                                            <div class="template-company"></div>
+                                            <div class="template-details"></div>
+                                        </div>
+                                        <div class="template-avatar square small"></div>
+                                    </div>
+                                </div>
+                                <span class="template-title">Corporate</span>
+                                <span class="template-desc">Professional, company focus</span>
                             </button>
                         </div>
                     </div>
@@ -195,13 +231,9 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="https://dee7studio.com" target="_blank" rel="noopener noreferrer">
-                        Crafted by <strong>Dee7 Studio</strong>
-                    </a>
-                </div>
-                <div class="footer-links">
-                    <button class="footer-link" id="socketBtn">🔌 Connect</button>
+                <div class="copyright-text">
+                    Copyright © <span id="currentYear"></span> • Designed with ❤️ by 
+                    <a href="https://dee7studio.com" target="_blank" rel="noopener noreferrer" class="dee7-link">Dee7 Studio</a>
                 </div>
             </div>
         </footer>
