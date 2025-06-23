@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Signature Generator</title>
+    <meta name="description" content="Create professional email signatures instantly. Modern, responsive tool with templates and multi-format export.">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="brand">
+                    <div class="logo">✉️</div>
+                    <div class="brand-info">
+                        <h1>Signature Studio</h1>
+                        <p>Professional email signatures in seconds</p>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Form Section -->
+            <section class="form-section">
+                <div class="section-header">
+                    <h2>Create Your Signature</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Template Selection -->
+                    <div class="form-group full-width">
+                        <label>Choose Template</label>
+                        <div class="template-grid">
+                            <button type="button" class="template-btn active" data-template="modern">
+                                <span class="template-icon">🎨</span>
+                                Modern
+                            </button>
+                            <button type="button" class="template-btn" data-template="classic">
+                                <span class="template-icon">📋</span>
+                                Classic
+                            </button>
+                            <button type="button" class="template-btn" data-template="minimal">
+                                <span class="template-icon">✨</span>
+                                Minimal
+                            </button>
+                            <button type="button" class="template-btn" data-template="corporate">
+                                <span class="template-icon">🏢</span>
+                                Corporate
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="form-group full-width">
+                        <label>Profile Picture</label>
+                        <div class="image-upload" id="imageUpload">
+                            <input type="file" id="imageInput" accept="image/*">
+                            <div class="upload-content">
+                                <div class="upload-icon">📸</div>
+                                <div class="upload-text">
+                                    <strong>Drop image here</strong> or click to browse
+                                </div>
+                                <div class="upload-hint">PNG, JPG up to 5MB • 200x200px recommended</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Info -->
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" placeholder="John" maxlength="25" required>
+                        <span class="char-count">0/25</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" placeholder="Doe" maxlength="25" required>
+                        <span class="char-count">0/25</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title">Job Title</label>
+                        <input type="text" id="title" placeholder="Senior Developer" maxlength="50">
+                        <span class="char-count">0/50</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" placeholder="Tech Corp" maxlength="40">
+                        <span class="char-count">0/40</span>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="john.doe@company.com" maxlength="50" required>
+                        <span class="char-count">0/50</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+1 (555) 123-4567" maxlength="20">
+                        <span class="char-count">0/20</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="website">Website</label>
+                        <input type="url" id="website" placeholder="www.company.com" maxlength="50">
+                        <span class="char-count">0/50</span>
+                    </div>
+
+                    <!-- Brand Color -->
+                    <div class="form-group">
+                        <label>Brand Color</label>
+                        <div class="color-input">
+                            <input type="color" id="colorPicker" value="#2563eb">
+                            <input type="text" id="colorText" placeholder="#2563eb" maxlength="7">
+                        </div>
+                    </div>
+
+                    <!-- Social Links -->
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn</label>
+                        <input type="url" id="linkedin" placeholder="linkedin.com/in/johndoe">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="twitter">Twitter/X</label>
+                        <input type="url" id="twitter" placeholder="twitter.com/johndoe">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="preview-section">
+                <div class="section-header">
+                    <h2>Live Preview</h2>
+                    <div class="view-controls">
+                        <button class="view-btn active" data-view="desktop">
+                            <span>💻</span> Desktop
+                        </button>
+                        <button class="view-btn" data-view="mobile">
+                            <span>📱</span> Mobile
+                        </button>
+                    </div>
+                </div>
+
+                <div class="preview-container">
+                    <div class="signature-preview" id="signaturePreview">
+                        <div class="signature-content" id="signatureContent">
+                            <!-- Preview content will be generated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="export-section">
+                    <div class="export-buttons">
+                        <button class="export-btn primary" id="copyHtmlBtn">
+                            <span class="btn-icon">📋</span>
+                            Copy HTML
+                        </button>
+                        <button class="export-btn" id="copyTextBtn">
+                            <span class="btn-icon">📄</span>
+                            Copy Text
+                        </button>
+                        <button class="export-btn" id="downloadBtn">
+                            <span class="btn-icon">⬇️</span>
+                            Download
+                        </button>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <h3>📖 How to Use</h3>
+                    <ol>
+                        <li>Click <strong>"Copy HTML"</strong> to copy the formatted signature</li>
+                        <li>Open your email client's signature settings</li>
+                        <li>Paste using <kbd>Ctrl+Shift+V</kbd> (or <kbd>Cmd+Shift+V</kbd> on Mac)</li>
+                        <li>Save your signature and start using it!</li>
+                    </ol>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="https://dee7studio.com" target="_blank" rel="noopener noreferrer">
+                        Crafted by <strong>Dee7 Studio</strong>
+                    </a>
+                </div>
+                <div class="footer-links">
+                    <button class="footer-link" id="socketBtn">🔌 Connect</button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
