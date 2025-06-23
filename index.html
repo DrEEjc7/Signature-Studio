@@ -10,7 +10,6 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
         <header class="header">
             <div class="header-content">
                 <div class="brand">
@@ -26,9 +25,7 @@
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Form Section -->
             <section class="form-section">
                 <div class="section-header">
                     <h2>Create Your Signature</h2>
@@ -38,7 +35,6 @@
                 </div>
 
                 <div class="form-grid">
-                    <!-- Template Selection -->
                     <div class="form-group full-width">
                         <label>Choose Template Style</label>
                         <div class="template-grid">
@@ -97,7 +93,6 @@
                         </div>
                     </div>
 
-                    <!-- Image Upload -->
                     <div class="form-group full-width">
                         <label>Profile Picture</label>
                         <div class="image-upload" id="imageUpload">
@@ -112,7 +107,6 @@
                         </div>
                     </div>
 
-                    <!-- Personal Info -->
                     <div class="form-group">
                         <label for="firstName">First Name</label>
                         <input type="text" id="firstName" placeholder="John" maxlength="25" required>
@@ -155,7 +149,6 @@
                         <span class="char-count">0/50</span>
                     </div>
 
-                    <!-- Brand Color -->
                     <div class="form-group">
                         <label>Brand Color</label>
                         <div class="color-input">
@@ -164,7 +157,6 @@
                         </div>
                     </div>
 
-                    <!-- Social Links -->
                     <div class="form-group">
                         <label for="linkedin">LinkedIn</label>
                         <input type="url" id="linkedin" placeholder="linkedin.com/in/johndoe">
@@ -174,10 +166,26 @@
                         <label for="twitter">Twitter/X</label>
                         <input type="url" id="twitter" placeholder="twitter.com/johndoe">
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="github">GitHub</label>
+                        <input type="url" id="github" placeholder="github.com/johndoe">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Include QR Code</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="qrCodeEnabled">
+                            <label for="qrCodeEnabled" class="checkbox-label">Add a QR code to your signature</label>
+                        </div>
+                    </div>
+                    <div class="form-group full-width" id="qrCodeUrlGroup" style="display: none;">
+                        <label for="qrCodeUrl">QR Code URL (defaults to website)</label>
+                        <input type="url" id="qrCodeUrl" placeholder="https://your-link.com">
+                    </div>
                 </div>
             </section>
 
-            <!-- Preview Section -->
             <section class="preview-section">
                 <div class="section-header">
                     <h2>Live Preview</h2>
@@ -194,8 +202,7 @@
                 <div class="preview-container">
                     <div class="signature-preview" id="signaturePreview">
                         <div class="signature-content" id="signatureContent">
-                            <!-- Preview content will be generated here -->
-                        </div>
+                            </div>
                     </div>
                 </div>
 
@@ -228,11 +235,10 @@
             </section>
         </main>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="footer-content">
                 <div class="copyright-text">
-                    Copyright © <span id="currentYear"></span> • Designed with ❤️ by 
+                    Copyright © <span id="currentYear"></span> • Designed with ❤️ by
                     <a href="https://dee7studio.com" target="_blank" rel="noopener noreferrer" class="dee7-link">Dee7 Studio</a>
                 </div>
             </div>
