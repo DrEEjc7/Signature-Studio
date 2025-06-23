@@ -282,10 +282,11 @@ strong { color: var(--text-primary); }
   transition: all var(--transition-fast);
 }
 
+/* Focus styles for better accessibility */
 .form-group input:focus {
   outline: none;
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
 }
 
@@ -501,6 +502,26 @@ strong { color: var(--text-primary); }
 
 .color-input input[type="text"] {
   flex: 1;
+}
+
+/* === Checkbox Styles === */
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-label {
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: 0 !important;
 }
 
 /* === View Controls === */
